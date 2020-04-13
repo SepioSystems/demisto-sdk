@@ -136,11 +136,14 @@ def get_remote_file(full_file_path, tag='master'):
                       'please make sure that you did not break backward compatibility. '
                       'Reason: {}'.format(github_path, exc))
         return {}
-
-    if full_file_path.endswith('json'):
-        details = json.loads(res.content)
-    elif full_file_path.endswith('yml'):
-        details = yaml.safe_load(res.content)
+    try:
+        if full_file_path.endswith('json'):
+            details = json.loads(res.content)
+        elif full_file_path.endswith('yml'):
+            details = yaml.safe_load(res.content)
+    except Exception:
+        print_error(f'Could not load file: {full_file_path}')
+        details = {}
     # if neither yml nor json then probably a CHANGELOG or README file.
     else:
         details = {}
