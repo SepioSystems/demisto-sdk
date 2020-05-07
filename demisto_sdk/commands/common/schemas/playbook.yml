@@ -97,6 +97,8 @@ mapping:
           skipunavailable:
             type: bool
             required: false
+          quiet:
+            type: bool
           task:
             type: map
             required: true

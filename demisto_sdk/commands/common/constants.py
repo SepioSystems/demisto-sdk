@@ -1150,3 +1150,10 @@ FETCH_REQUIRED_PARAMS = [
 ]
 
 DOCS_COMMAND_SECTION_REGEX = r'(?:###\s{}).+?(?:(?=(?:\n###\s))|(?=(?:\n##\s))|\Z)'
+# Ignore list for all 'run_all_validations_on_file' method
+IGNORE_FILES_BLACK_LIST = ['pack_metadata.json',
+                           'Packs/Akamai_SIEM/Integrations/Akamai_SIEM/Akamai_SIEM_test/TestCommandsFunctions',
+                           'Packs/ApiModules/Scripts/JSONFeedApiModule/test_data',
+                           'Packs/Base/Scripts/StixParser/TestData',
+                           'Packs/CortexXDR/Integrations/PaloAltoNetworks_XDR/test_data',
+                           'Packs/EDL/Integrations/EDL/EDL_test/TestHelperFunctions']

@@ -19,10 +19,11 @@ from demisto_sdk.commands.common.configuration import Configuration
 from demisto_sdk.commands.common.constants import (
     BETA_INTEGRATION_REGEX, BETA_INTEGRATION_YML_REGEX, BETA_INTEGRATIONS_DIR,
     CHECKED_TYPES_REGEXES, CODE_FILES_REGEX, DIR_LIST_FOR_REGULAR_ENTETIES,
-    IGNORED_TYPES_REGEXES, IMAGE_REGEX, INTEGRATION_REGEX, INTEGRATION_REGXES,
-    JSON_ALL_DASHBOARDS_REGEXES, JSON_ALL_INCIDENT_TYPES_REGEXES,
-    JSON_ALL_LAYOUT_REGEXES, JSON_INDICATOR_AND_INCIDENT_FIELDS,
-    KNOWN_FILE_STATUSES, OLD_YML_FORMAT_FILE, PACKAGE_SCRIPTS_REGEXES,
+    IGNORE_FILES_BLACK_LIST, IGNORED_TYPES_REGEXES, IMAGE_REGEX,
+    INTEGRATION_REGEX, INTEGRATION_REGXES, JSON_ALL_DASHBOARDS_REGEXES,
+    JSON_ALL_INCIDENT_TYPES_REGEXES, JSON_ALL_LAYOUT_REGEXES,
+    JSON_INDICATOR_AND_INCIDENT_FIELDS, KNOWN_FILE_STATUSES,
+    OLD_YML_FORMAT_FILE, PACKAGE_SCRIPTS_REGEXES,
     PACKAGE_SUPPORTING_DIRECTORIES, PACKS_DIR, PACKS_DIRECTORIES,
     PLAYBOOK_REGEX, PLAYBOOKS_REGEXES_LIST, REPUTATION_REGEX, SCHEMA_REGEX,
     SCRIPT_REGEX, TEST_PLAYBOOK_REGEX, TEST_PLAYBOOKS_DIR, TESTS_DIRECTORIES,
@@ -561,7 +562,9 @@ class FilesValidator:
         # We validate only yml json and .md files
         if file_extension not in ['.yml', '.json', '.md']:
             return
-
+        for ignore_pattern in IGNORE_FILES_BLACK_LIST:
+            if ignore_pattern in file_path:
+                return
         # Ignoring changelog and description files since these are checked on the integration validation
         if 'changelog' in file_path.lower() or 'description' in file_path.lower():
             return
@@ -658,7 +661,7 @@ class FilesValidator:
             all_files_to_validate |= {file for file in glob(fr'{directory}/**', recursive=True) if
                                       not os.path.isdir(file)}
         print('Validating all Pack and Beta Integration files')
-        for file in all_files_to_validate:
+        for file in sorted(all_files_to_validate):
             self.run_all_validations_on_file(file, file_type=find_type(file))
 
     def validate_pack(self):

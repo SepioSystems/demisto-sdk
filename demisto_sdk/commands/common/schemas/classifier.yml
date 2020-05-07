@@ -1,5 +1,15 @@
 type: map
 mapping:
+  incidentSamples:
+    type: seq
+    sequence:
+      - type: str
+  isDefault:
+    type: bool
+  fromversion:
+    type: str
+  sortValues:
+    type: any
   id:
     type: str
     required: True
